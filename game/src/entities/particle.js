@@ -9,6 +9,10 @@
 // Particle().position(center).color(0.9, 0, 0, 0.5).mixColor(1, 0, 0, 1).gravity(1).triangle()
 // Particle().position(center).velocity(velocity).color(0, 0, 0, 1).gravity(0.4, 0.6).circle()
 
+import {randInRange, lerp} from '../util/math';
+import Vector from '../util/vector';
+import {drawBoundingRect} from '../world/gamestate';
+
 // enum ParticleType
 var PARTICLE_CIRCLE = 0;
 var PARTICLE_TRIANGLE = 1;
@@ -83,7 +87,7 @@ ParticleInstance.prototype.draw = function(c) {
 		c.closePath();
 		c.fill();
 		break;
-		
+
 	case PARTICLE_LINE:
 		var dx = Math.cos(this.m_angle) * this.m_radius;
 		var dy = Math.sin(this.m_angle) * this.m_radius;
@@ -93,7 +97,7 @@ ParticleInstance.prototype.draw = function(c) {
 		c.lineTo(this.m_position.x + dx, this.m_position.y + dy);
 		c.stroke();
 		break;
-		
+
 	case PARTICLE_CUSTOM:
 		c.fillStyle = cssRGBA(this.m_red, this.m_green, this.m_blue, this.m_alpha);
 		c.save();
@@ -136,54 +140,49 @@ ParticleInstance.prototype.angularVelocity = function(min, max) { this.m_angular
 ParticleInstance.prototype.position = function(position) { this.m_position = position; return this; };
 ParticleInstance.prototype.velocity = function(velocity) { this.m_velocity = velocity; return this; };
 
-// wrap in anonymous function for private variables
-var Particle = (function() {
-	// particles is an array of ParticleInstances where the first count are in use
-	var particles = new Array(3000);
-	var maxCount = particles.length;
-	var count = 0;
+// particles is an array of ParticleInstances where the first count are in use
+var particles = new Array(3000);
+var maxCount = particles.length;
+var count = 0;
 
-	for(var i = 0; i < particles.length; i++) {
-		particles[i] = new ParticleInstance();
-	}
+for(var i = 0; i < particles.length; i++) {
+	particles[i] = new ParticleInstance();
+}
 
-	function Particle() {
-		var particle = (count < maxCount) ? particles[count++] : particles[maxCount - 1];
-		particle.init();
-		return particle;
-	}
+export default function Particle() {
+	var particle = (count < maxCount) ? particles[count++] : particles[maxCount - 1];
+	particle.init();
+	return particle;
+}
 
-	Particle.reset = function() {
-		count = 0;
-	};
+Particle.reset = function() {
+	count = 0;
+};
 
-	Particle.tick = function(seconds) {
-		for(var i = 0; i < count; i++) {
-			var isAlive = particles[i].tick(seconds);
-			if (!isAlive) {
-				// swap the current particle with the last active particle (this will swap with itself if this is the last active particle)
-				var temp = particles[i];
-				particles[i] = particles[count - 1];
-				particles[count - 1] = temp;
-				
-				// forget about the dead particle that we just moved to the end of the active particle list
-				count--;
-				
-				// don't skip the particle that we just swapped in
-				i--;
-			}
+Particle.tick = function(seconds) {
+	for(var i = 0; i < count; i++) {
+		var isAlive = particles[i].tick(seconds);
+		if (!isAlive) {
+			// swap the current particle with the last active particle (this will swap with itself if this is the last active particle)
+			var temp = particles[i];
+			particles[i] = particles[count - 1];
+			particles[count - 1] = temp;
+
+			// forget about the dead particle that we just moved to the end of the active particle list
+			count--;
+
+			// don't skip the particle that we just swapped in
+			i--;
 		}
-	};
+	}
+};
 
-	Particle.draw = function(c) {
-		for(var i = 0; i < count; i++) {
-			var particle = particles[i];
-			var pos = particle.m_position;
-			if (pos.x >= drawMinX && pos.y >= drawMinY && pos.x <= drawMaxX && pos.y <= drawMaxY) {
-				particle.draw(c);
-			}
+Particle.draw = function(c) {
+	for(var i = 0; i < count; i++) {
+		var particle = particles[i];
+		var pos = particle.m_position;
+		if (pos.x >= drawBoundingRect.minX && pos.y >= drawBoundingRect.minY && pos.x <= drawBoundingRect.maxX && pos.y <= drawBoundingRect.maxY) {
+			particle.draw(c);
 		}
-	};
-
-	return Particle;
-})();
+	}
+};

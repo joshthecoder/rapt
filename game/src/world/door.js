@@ -1,11 +1,11 @@
-#require <class.js>
+import Edge from './edge';
 
 // enum DoorType
-var ONE_WAY = 0;
-var TWO_WAY = 1;
+const ONE_WAY = 0;
+const TWO_WAY = 1;
 
 
-function Door(edge0, edge1, cell0, cell1) {
+export default function Door(edge0, edge1, cell0, cell1) {
 	this.cells = [cell0, cell1];
 	this.edges = [edge0, edge1];
 }

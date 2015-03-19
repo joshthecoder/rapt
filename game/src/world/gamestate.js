@@ -1,22 +1,35 @@
+import CollisionDetector from '../collisions/collisiondetection';
+
+import Particle from '../entities/particle';
+import Player from '../entities/player';
+
+import {randInRange} from '../util/math';
+import Vector from '../util/vector';
+
+import Door from './door';
+import {Edge, EDGE_BLUE, EDGE_RED} from './edge';
+import World from './world';
+import './levelloader';
+
 // constants
-var SPAWN_POINT_PARTICLE_FREQ = 0.3;
+const SPAWN_POINT_PARTICLE_FREQ = 0.3;
 
 // enum GameStatus
-var GAME_IN_PLAY = 0;
-var GAME_WON = 1;
-var GAME_LOST = 2;
+export const GAME_IN_PLAY = 0;
+export const GAME_WON = 1;
+export const GAME_LOST = 2;
 
 // enum StatIndex
-var STAT_PLAYER_DEATHS = 0;
-var STAT_ENEMY_DEATHS = 1;
-var STAT_COGS_COLLECTED = 2;
-var STAT_NUM_COGS = 3;
+export const STAT_PLAYER_DEATHS = 0;
+export const STAT_ENEMY_DEATHS = 1;
+export const STAT_COGS_COLLECTED = 2;
+export const STAT_NUM_COGS = 3;
 
 
 // class GameState
-function GameState() {
+export function GameState() {
 	this.world = new World(50, 50, new Vector(0.5, 0.5), new Vector(0.5, 0.5));
-	
+
 	// Player color must be EDGE_RED or EDGE_BLUE to support proper collisions with doors!
 	this.playerA = new Player(this.world.spawnPoint, EDGE_RED);
 	this.playerB = new Player(this.world.spawnPoint, EDGE_BLUE);
@@ -42,8 +55,10 @@ var gameState;
 
 // bounding rectangle around all pixels currently being drawn to (also includes 2 cells of padding,
 // so just check that the enemy center is within these bounds, don't bother about adding the radius)
-var drawMinX = 0, drawMinY = 0;
-var drawMaxX = 0, drawMaxY = 0;
+export var drawBoundingRect = {
+	minX: 0, minY: 0,
+	maxX: 0, maxY: 0
+};
 
 GameState.prototype.recordModification = function() {
 	this.modificationCount++;
@@ -63,7 +78,7 @@ GameState.prototype.getSpawnPoint = function() {
 
 GameState.prototype.setSpawnPoint = function(point) {
 	this.world.spawnPoint = new Vector(point.x, point.y);
-	
+
 	// offset to keep spawn point from drawing below ground
 	this.spawnPointOffset.y = 0.125;
 
@@ -73,9 +88,9 @@ GameState.prototype.setSpawnPoint = function(point) {
 
 GameState.prototype.gameWon = function() {
 	var goal = this.world.goal;
-	var atGoalA = !this.playerA.isDead() && Math.abs(this.playerA.getCenter().x - goal.x) < 0.4 && 
+	var atGoalA = !this.playerA.isDead() && Math.abs(this.playerA.getCenter().x - goal.x) < 0.4 &&
 					Math.abs(this.playerA.getCenter().y - goal.y) < 0.4;
-	var atGoalB = !this.playerB.isDead() && Math.abs(this.playerB.getCenter().x - goal.x) < 0.4 && 
+	var atGoalB = !this.playerB.isDead() && Math.abs(this.playerB.getCenter().x - goal.x) < 0.4 &&
 					Math.abs(this.playerB.getCenter().y - goal.y) < 0.4;
 	return atGoalA && atGoalB;
 }
@@ -287,11 +302,11 @@ function drawGoal(c, point, time) {
 
 GameState.prototype.draw = function(c, xmin, ymin, xmax, ymax) {
 	// no enemy or particle is larger than two cells wide
-	drawMinX = xmin - 2;
-	drawMinY = ymin - 2;
-	drawMaxX = xmax + 2;
-	drawMaxY = ymax + 2;
-	
+	var drawMinX = drawBoundingRect.minX = xmin - 2;
+	var drawMinY = drawBoundingRect.minY = ymin - 2;
+	var drawMaxX = drawBoundingRect.maxX = xmax + 2;
+	var drawMaxY = drawBoundingRect.maxY = ymax + 2;
+
 	// spawn point and goal
 	var spawnPoint = this.world.spawnPoint.add(this.spawnPointOffset);
 	var goal = this.world.goal;
@@ -301,11 +316,11 @@ GameState.prototype.draw = function(c, xmin, ymin, xmax, ymax) {
 	if (goal.x >= drawMinX && goal.y >= drawMinY && goal.x <= drawMaxX && goal.y <= drawMaxY) {
 		drawGoal(c, goal, this.timeSinceStart);
 	}
-	
+
 	// players
 	this.playerA.draw(c);
 	this.playerB.draw(c);
-	
+
 	// enemies
 	for (var i = 0; i < this.enemies.length; ++i) {
 		var enemy = this.enemies[i];

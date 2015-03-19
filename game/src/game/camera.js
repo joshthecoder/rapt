@@ -1,4 +1,7 @@
-var useBackgroundCache = true;
+import BackgroundCache from './backgroundcache';
+import Vector from '../util/vector';
+
+var useBackgroundCache = false;  // TODO: Broken. Fix it? Remember to re-enable in game.js
 
 // class SplitScreenCamera
 function SplitScreenCamera(playerA, playerB, width, height) {
@@ -6,7 +9,7 @@ function SplitScreenCamera(playerA, playerB, width, height) {
 	this.playerB = playerB;
 	this.width = width;
 	this.height = height;
-	
+
 	if (useBackgroundCache) {
 		this.backgroundCacheA = new BackgroundCache('a');
 		this.backgroundCacheB = new BackgroundCache('b');
@@ -47,7 +50,7 @@ SplitScreenCamera.prototype.draw = function(c, renderer) {
 	var positionA = this.playerA.getCenter();
 	var positionB = this.playerB.getCenter();
 	var center = positionA.add(positionB).div(2);
-	
+
 	// maximum distance between a player and the center is the distance to the box that is half the size of the screen
 	var temp = positionB.sub(positionA).unit();
 	temp = new Vector(this.width / Math.abs(temp.x), this.height / Math.abs(temp.y));
@@ -96,4 +99,4 @@ SplitScreenCamera.prototype.draw = function(c, renderer) {
 	}
 };
 
-var Camera = SplitScreenCamera;
+export default SplitScreenCamera;

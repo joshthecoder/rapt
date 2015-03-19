@@ -1,5 +1,9 @@
+import AABB from './aabb';
+import {SHAPE_CIRCLE} from './shape';
+import Vector from '../util/vector';
+
 // class Circle extends Shape
-function Circle(center, radius) {
+export default function Circle(center, radius) {
 	this.center = center;
 	this.radius = radius;
 }

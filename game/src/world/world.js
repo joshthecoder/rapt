@@ -1,7 +1,21 @@
-var WORLD_MARGIN = 60;
+import AABB from '../collisions/aabb';
+import Vector from '../util/vector';
+
+import {
+	Cell,
+	CELL_EMPTY,
+	CELL_SOLID,
+	CELL_FLOOR_DIAG_LEFT,
+	CELL_FLOOR_DIAG_RIGHT,
+	CELL_CEIL_DIAG_LEFT,
+	CELL_CEIL_DIAG_RIGHT
+} from './cell';
+import {Edge, EDGE_NEUTRAL} from './edge';
+
+const WORLD_MARGIN = 60;
 
 // class World
-function World(w, h, spawnPoint, goal) {
+export default function World(w, h, spawnPoint, goal) {
 	this.cells = new Array(w);
 	for (var x = 0; x < w; ++x) {
 		this.cells[x] = new Array(h);
@@ -9,7 +23,7 @@ function World(w, h, spawnPoint, goal) {
 			this.cells[x][y] = new Cell(x, y, CELL_SOLID);
 		}
 	}
-	
+
 	this.width = w;
 	this.height = h;
 	this.safety = spawnPoint;

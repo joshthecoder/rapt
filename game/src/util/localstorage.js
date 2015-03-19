@@ -1,4 +1,4 @@
-function setLocalStorage(name, value) {
+export function setLocalStorage(name, value) {
 	// attempt to use localStorage first
 	if (typeof localStorage != 'undefined') {
 		localStorage[name] = value;
@@ -9,7 +9,7 @@ function setLocalStorage(name, value) {
 	}
 }
 
-function getLocalStorage(name) {
+export function getLocalStorage(name) {
 	// attempt to use localStorage first
 	if (typeof localStorage != 'undefined') {
 		return localStorage.hasOwnProperty(name) ? localStorage[name] : '';

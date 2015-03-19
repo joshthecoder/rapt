@@ -1,3 +1,7 @@
+import AABB from './aabb';
+import Segment from './segment';
+import {SHAPE_POLYGON} from './shape';
+
 /**
   *  For the polygon class, the segments and the bounding box are all relative to the center of the polygon.
   *  That is, when the polygon moves, the center is the only thing that changes.  This is to prevent
@@ -10,11 +14,10 @@
   */
 
 // class Polygon extends Shape
-function Polygon() {
+export default function Polygon(center, ...vertices) {
 	// center is the first argument, the next arguments are the vertices relative to the center
-	arguments = Array.prototype.slice.call(arguments);
-	this.center = arguments.shift();
-	this.vertices = arguments;
+	this.center = center;
+	this.vertices = vertices;
 
 	this.segments = [];
 	for(var i = 0; i < this.vertices.length; i++) {

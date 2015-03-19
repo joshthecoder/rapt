@@ -1,8 +1,11 @@
 // abstract class Screen
-function Screen() {
-	this.tick = function(seconds) {}
-	this.draw = function(c) {}
-	this.resize = function(w, h) {}
-	this.keyDown = function(key) {}
-	this.keyUp = function(key) {}
+export default class Screen {
+	constructor() {
+	}
+
+	tick(seconds) { }
+	draw(c) { }
+	resize(w, h) { }
+	keyDown(key) { }
+	keyUp(key) { }
 }

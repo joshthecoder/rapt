@@ -1,5 +1,5 @@
 // class Vector
-function Vector(x, y) {
+export default function Vector(x, y) {
 	this.x = x;
 	this.y = y;
 }

@@ -1,4 +1,4 @@
-function setCookie(name, value, days) {
+export function setCookie(name, value, days) {
 	if (days) {
 		var date = new Date();
 		date.setTime(date.getTime() + (days*24*60*60*1000));
@@ -9,7 +9,7 @@ function setCookie(name, value, days) {
 	document.cookie = name + '=' + escape(value) + expires + '; path=/';
 }
 
-function getCookie(name) {
+export function getCookie(name) {
 	var nameEQ = name + '=';
 	var parts = document.cookie.split(';');
 	for (var i = 0; i < parts.length; i++) {

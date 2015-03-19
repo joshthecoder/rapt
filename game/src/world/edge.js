@@ -1,18 +1,20 @@
+import Segment from '../collisions/segment';
+
 // enum EdgeType
-var EDGE_FLOOR = 0;
-var EDGE_LEFT = 1;
-var EDGE_RIGHT = 2;
-var EDGE_CEILING = 3;
+export const EDGE_FLOOR = 0;
+export const EDGE_LEFT = 1;
+export const EDGE_RIGHT = 2;
+export const EDGE_CEILING = 3;
 
 // enum EdgeColor
-var EDGE_NEUTRAL = 0;
-var EDGE_RED = 1;
-var EDGE_BLUE = 2;
-var EDGE_PLAYERS = 3;
-var EDGE_ENEMIES = 4;
+export const EDGE_NEUTRAL = 0;
+export const EDGE_RED = 1;
+export const EDGE_BLUE = 2;
+export const EDGE_PLAYERS = 3;
+export const EDGE_ENEMIES = 4;
 
 // class Edge
-function Edge(start, end, color) {
+export function Edge(start, end, color) {
 	this.segment = new Segment(start, end);
 	this.color = color;
 }

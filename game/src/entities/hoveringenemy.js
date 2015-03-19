@@ -1,17 +1,18 @@
-#require <class.js>
-#require <enemy.js>
+import {Enemy} from './enemy';
 
-HoveringEnemy.subclasses(Enemy);
+import Circle from '../collisions/circle';
 
 /**
   * Abstract class representing a Hovering Enemy
   */
-function HoveringEnemy(type, center, radius, elasticity) {
-	Enemy.prototype.constructor.call(this, type, elasticity);
+export default class HoveringEnemy extends Enemy {
+	constructor(type, center, radius, elasticity) {
+		super(type, elasticity);
 
-	this.hitCircle = new Circle(center, radius);
+		this.hitCircle = new Circle(center, radius);
+	}
+
+	getShape() {
+		return this.hitCircle;
+	}
 }
-
-HoveringEnemy.prototype.getShape = function() {
-	return this.hitCircle;
-};

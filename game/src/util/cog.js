@@ -54,13 +54,13 @@ function drawCogIcon(c, x, y, time) {
 	c.restore();
 }
 
-function drawGoldenCog(c, x, y, time) {
+export function drawGoldenCog(c, x, y, r, time) {
 	c.save();
 	c.strokeStyle = 'rgb(255, 245, 0)';
 	c.fillStyle = 'rgb(255, 245, 0)';
 
 	c.translate(x, y);
 	c.rotate(time * Math.PI / 2);
-	drawCog(c, x, y, GOLDEN_COG_RADIUS, 16, 5, false, 64);
+	drawCog(c, x, y, r, 16, 5, false, 64);
 	c.restore();
 }

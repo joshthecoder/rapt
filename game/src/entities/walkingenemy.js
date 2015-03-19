@@ -1,18 +1,19 @@
-#require <class.js>
-#require <enemy.js>
+import {Enemy} from './enemy';
 
-WalkingEnemy.subclasses(Enemy);
+import Circle from '../collisions/circle';
 
-function WalkingEnemy(type, center, radius, elasticity) {
-	Enemy.prototype.constructor.call(this, type, elasticity);
+export default class WalkingEnemy extends Enemy {
+	constructor(type, center, radius, elasticity) {
+		super(type, elasticity);
 
-	this.hitCircle = new Circle(center, radius);
+		this.hitCircle = new Circle(center, radius);
+	}
+
+	getShape() {
+		return this.hitCircle;
+	}
+
+	move(seconds) {
+		return this.velocity.mul(seconds);
+	}
 }
-
-WalkingEnemy.prototype.getShape = function() {
-	return this.hitCircle;
-};
-
-WalkingEnemy.prototype.move = function(seconds) {
-	return this.velocity.mul(seconds);
-};

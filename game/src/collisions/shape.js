@@ -1,4 +1,4 @@
 // enum ShapeType
-var SHAPE_CIRCLE = 0;
-var SHAPE_AABB = 1;
-var SHAPE_POLYGON = 2;
+export var SHAPE_CIRCLE = 0;
+export var SHAPE_AABB = 1;
+export var SHAPE_POLYGON = 2;

@@ -1,4 +1,5 @@
-#require <util.js>
+import {setLocalStorage, getLocalStorage} from '../util/localstorage';
+import keyCodeArray from '../util/keyCode-array';
 
 function toTitleCase(s) {
 	return s.toLowerCase().replace(/^(.)|\s(.)/g, function($1) { return $1.toUpperCase(); });
@@ -63,3 +64,5 @@ var Keys = {
 		}
 	}
 };
+
+export default Keys;

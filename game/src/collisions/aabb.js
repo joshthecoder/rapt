@@ -1,5 +1,9 @@
+import Polygon from './polygon';
+import {SHAPE_AABB} from './shape';
+import Vector from '../util/vector';
+
 // class AABB extends Shape
-function AABB(lowerLeft, upperRight) {
+export default function AABB(lowerLeft, upperRight) {
 	this.lowerLeft = new Vector(
 		Math.min(lowerLeft.x, upperRight.x),
 		Math.min(lowerLeft.y, upperRight.y));

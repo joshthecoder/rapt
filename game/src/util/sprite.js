@@ -1,5 +1,7 @@
+import Vector from './vector';
+
 // class Sprite
-function Sprite() {
+export default function Sprite() {
 	this.flip = 0;
 	this.angle = 0;
 	this.offsetBeforeRotation = new Vector(0, 0);

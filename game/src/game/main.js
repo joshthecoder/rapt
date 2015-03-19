@@ -1,4 +1,9 @@
-#require <game.js>
+import {Game} from './game';
+import Keys from './keys';
+import PlayerStats from './playerstats';
+
+import Particle from '../entities/particle';
+import {GAME_WON, GAME_LOST} from '../world/gamestate';
 
 var ENTER_KEY = 13;
 var ESCAPE_KEY = 27;
@@ -200,7 +205,7 @@ Level.prototype.tick = function() {
 
 	if (this.game != null) {
 		// if the computer goes to sleep, act like the game was paused
-		if (seconds > 0 && seconds < 1) this.game.tick(seconds); 
+		if (seconds > 0 && seconds < 1) this.game.tick(seconds);
 
 		this.game.lastLevel = menu.isLastLevel(this.username, this.levelname);
 		this.game.draw(this.context);
@@ -227,19 +232,27 @@ Level.prototype.load = function(username, levelname, onSuccess) {
 	this.levelname = levelname;
 	this.isLoading = true;
 
+  setTimeout(function() {
+    this_.json = require('../../../official_levels/Intro 1.json');
+    this_.restart();
+    this_.lastTime = new Date();
+    this_.isLoading = false;
+    onSuccess && onSuccess();
+  }, 250);
+
 	var this_ = this;
-	ajaxGet('level', getLevelUrl(username, levelname), function(json) {
-		// reset the game
-		this_.json = JSON.parse(json['level']['data']);
-		this_.restart();
-
-		// reset the tick timer in case level loading took a while (we don't want the physics to
-		// try and catch up, because then it will rush through the first few seconds of the game)
-		this_.lastTime = new Date();
-
-		this_.isLoading = false;
-		if (onSuccess) onSuccess();
-	});
+	// ajaxGet('level', getLevelUrl(username, levelname), function(json) {
+	// 	// reset the game
+	// 	this_.json = JSON.parse(json['level']['data']);
+	// 	this_.restart();
+  //
+	// 	// reset the tick timer in case level loading took a while (we don't want the physics to
+	// 	// try and catch up, because then it will rush through the first few seconds of the game)
+	// 	this_.lastTime = new Date();
+  //
+	// 	this_.isLoading = false;
+	// 	if (onSuccess) onSuccess();
+	// });
 };
 
 Level.prototype.show = function() {
@@ -357,7 +370,7 @@ function scrollGameIntoWindow() {
 $(document).ready(function() {
 	scrollGameIntoWindow();
 	Keys.load();
-	
+
 	hash = new Hash();
 	menu = new Menu();
 	level = new Level();
@@ -428,22 +441,22 @@ function tick() {
 	if (hash.hasChanged()) {
 		if (hash.username == null) {
 			hash.setHash('rapt', null);
-		} else if (hash.levelname == null) {
-			// force the game to stop (so it doesn't spin cpu cycles in the background)
-			level.game = null;
-
-			// set the menu selection to the previous level, if there was one
-			var index = menu.indexOfLevel(level.username, level.levelname);
-			if (index !== -1) menu.selectedIndex = index;
-
-			menu.load(hash.username, function() { menu.show(); });
-			menu.show();
+		// } else if (hash.levelname == null) {
+		// 	// force the game to stop (so it doesn't spin cpu cycles in the background)
+		// 	level.game = null;
+    //
+		// 	// set the menu selection to the previous level, if there was one
+		// 	var index = menu.indexOfLevel(level.username, level.levelname);
+		// 	if (index !== -1) menu.selectedIndex = index;
+    //
+		// 	// menu.load(hash.username, function() { menu.show(); });
+		// 	// menu.show();
 		} else {
 			scrollGameIntoWindow();
-			
+
 			// make sure the menu is loaded so we can go right to the menu when the user presses escape
-			menu.load(hash.username);
-			
+			// menu.load(hash.username);
+
 			level.load(hash.username, hash.levelname, function() {
 				level.show();
 			});

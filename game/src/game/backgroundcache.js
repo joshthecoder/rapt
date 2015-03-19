@@ -25,8 +25,10 @@
 // Cube (whole)    |	 26		|	   28		|	  37	 |		43
 // Cube (split)    |	 17		|	   14		|	  20	 |		20
 
+import {gameScale} from './game';
+
 // class BackgroundCache
-function BackgroundCache(name) {
+export default function BackgroundCache(name) {
 	// create a <canvas>, unless we already created one in a previous game
 	var id = 'background-cache-' + name;
 	this.canvas = document.getElementById(id);
@@ -37,13 +39,13 @@ function BackgroundCache(name) {
 		document.body.appendChild(this.canvas);
 	}
 	this.c = this.canvas.getContext('2d');
-	
+
 	// the cache is empty at first
 	this.xmin = 0;
 	this.ymin = 0;
 	this.xmax = 0;
 	this.ymax = 0;
-	
+
 	this.modificationCount = -1;
 }
 
@@ -51,7 +53,7 @@ BackgroundCache.prototype.draw = function(c, xmin, ymin, xmax, ymax) {
 	// if cache is invalid, update cache
 	if (this.modificationCount != gameState.modificationCount || xmin < this.xmin || xmax > this.xmax || ymin < this.ymin || ymax > this.ymax) {
 		this.modificationCount = gameState.modificationCount;
-		
+
 		// set bounds of cached image
 		var viewportWidth = 2 * (xmax - xmin);
 		var viewportHeight = 2 * (ymax - ymin);
@@ -59,30 +61,30 @@ BackgroundCache.prototype.draw = function(c, xmin, ymin, xmax, ymax) {
 		this.ymin = ymin - viewportHeight / 4;
 		this.xmax = xmax + viewportWidth / 4;
 		this.ymax = ymax + viewportHeight / 4;
-		
+
 		// resize canvas bigger if needed
 		var width = Math.ceil(viewportWidth * gameScale);
 		var height = Math.ceil(viewportHeight * gameScale);
 		this.canvas.width = Math.max(this.canvas.width, width);
 		this.canvas.height = Math.max(this.canvas.height, height);
-		
+
 		// clear the background
 		this.c.fillStyle = '#BFBFBF';
 		this.c.fillRect(0, 0, width, height);
-		
+
 		// set up transform
 		this.c.save();
 		this.c.translate(width / 2, height / 2);
 		this.c.scale(gameScale, -gameScale);
 		this.c.lineWidth = 1 / gameScale;
-		
+
 		// render
 		this.c.translate(-(this.xmin + this.xmax) / 2, -(this.ymin + this.ymax) / 2);
 		gameState.world.draw(this.c, this.xmin, this.ymin, this.xmax, this.ymax);
-		
+
 		// undo transform
 		this.c.restore();
-		
+
 		// draw an X so we can see the cache (for debugging)
 		/*this.c.strokeStyle = 'rgba(0, 0, 0, 0.1)';
 		this.c.lineWidth = 5;
@@ -93,7 +95,7 @@ BackgroundCache.prototype.draw = function(c, xmin, ymin, xmax, ymax) {
 		this.c.lineTo(0, height);
 		this.c.stroke();*/
 	}
-	
+
 	// draw from cache
 	// for performance, we MUST make sure the image is drawn at an integer coordinate to take
 	// advantage of fast blitting, otherwise browsers will use slow software bilinear interpolation

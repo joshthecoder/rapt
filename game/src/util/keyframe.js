@@ -1,7 +1,8 @@
-#require <vector.js>
+import {lerp} from './math';
+import Vector from './vector';
 
 // class Keyframe
-function Keyframe(x, y) {
+export default function Keyframe(x, y) {
 	this.center = new Vector(x, y);
 	this.angles = [];
 }

@@ -1,5 +1,5 @@
 // modified from https://github.com/Superficial/keyCode-array
-var keyCodeArray = [,,,
+export default [,,,
 'CANCEL',
 ,
 ,

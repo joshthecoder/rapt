@@ -1,5 +1,5 @@
 // class Segment
-function Segment(start, end) {
+export default function Segment(start, end) {
 	this.start = start;
 	this.end = end;
 	this.normal = end.sub(start).flip().unit();

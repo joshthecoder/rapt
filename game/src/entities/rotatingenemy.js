@@ -1,19 +1,20 @@
-#require <class.js>
-#require <enemy.js>
+import Circle from '../collisions/circle';
 
-RotatingEnemy.subclasses(Enemy);
+import {Enemy} from './enemy';
 
 /**
   * Abstract class representing enemies that may rotating, including seeking enemies.
   * These enemies are all circular.
   */
-function RotatingEnemy(type, center, radius, heading, elasticity) {
-	Enemy.prototype.constructor.call(this, type, elasticity);
+export default class RotatingEnemy extends Enemy {
+	constructor(type, center, radius, heading, elasticity) {
+		super(type, elasticity);
 
-	this.hitCircle = new Circle(center, radius);
-	this.heading = heading;
+		this.hitCircle = new Circle(center, radius);
+		this.heading = heading;
+	}
+
+	getShape() {
+		return this.hitCircle;
+	}
 }
-
-RotatingEnemy.prototype.getShape = function() {
-	return this.hitCircle;
-};

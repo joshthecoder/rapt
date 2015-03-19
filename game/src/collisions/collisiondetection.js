@@ -27,11 +27,19 @@
 //
 // - gameState is a global, so all functions that take gameState as an argument in C++ don't now
 
+import AABB from './aabb';
+import Circle from './circle';
+import Contact from './contact';
+import './edgequad';
+import Segment from './segment';
+import {SHAPE_AABB, SHAPE_CIRCLE, SHAPE_POLYGON} from './shape';
 
-
+import Vector from '../util/vector';
+import {CELL_EMPTY} from '../world/cell';
+import {EDGE_ENEMIES} from '../world/edge';
 
 // static class CollisionDetector
-function CollisionDetector() {}
+export default function CollisionDetector() {}
 
 var MAX_VELOCITY = 30;
 var MAX_COLLISIONS = 20;
@@ -42,6 +50,8 @@ var MAX_LOS_DISTANCE_SQUARED = 625;
 
 // how far should we push something out if there's an emergency?
 var EMERGENCY_PUSH_DISTANCE = 0.1;
+
+var edgeQuad = global.edgeQuad;
 
 ////////////////////////////////////////////////////////////////////////////////
 // public functions

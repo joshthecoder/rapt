@@ -1,5 +1,31 @@
-#require <class.js>
-#require <gamestate.js>
+import {CELL_EMPTY, CELL_SOLID} from './cell';
+import {EDGE_BLUE, EDGE_RED} from './edge';
+import {GameState} from './gamestate';
+
+import Bomber from '../entities/bomber';
+import BouncyRocketLauncher from '../entities/bouncyrocketlauncher';
+import CorrosionCloud from '../entities/corrosioncloud';
+import DoomMagnet from '../entities/doommagnet';
+import Doorbell from '../entities/doorbell';
+import GoldenCog from '../entities/goldencog';
+import Grenadier from '../entities/grenadier';
+import JetStream from '../entities/jetstream';
+import Headache from '../entities/headache';
+import HelpSign from '../entities/helpsign';
+import Hunter from '../entities/hunter';
+import MultiGun from '../entities/multigun';
+import Popper from '../entities/popper';
+import RocketSpider from '../entities/rocketspider';
+import ShockHawk from '../entities/shockhawk';
+import SpikeBall from '../entities/spikeball';
+import Stalacbat from '../entities/stalacbat';
+import WallAvoider from '../entities/wallavoider';
+import WallCrawler from '../entities/wallcrawler';
+import Wheeligator from '../entities/wheeligator';
+
+import Vector from '../util/vector';
+
+import World from '../world/world';
 
 function jsonToTarget(json) {
 	return (json['color'] === 1 ? gameState.playerA : gameState.playerB);
@@ -54,13 +80,13 @@ function jsonToEnemy(json) {
 
 GameState.prototype.loadLevelFromJSON = function(json) {
 	// values are quoted (like json['width'] instead of json.width) so closure compiler doesn't touch them
-	
+
 	// Reset stats
 	this.stats = [0, 0, 0, 0];
 
 	// Load size, spawn point, and goal
 	this.world = new World(json['width'], json['height'], jsonToVec(json['start']), jsonToVec(json['end']));
-	
+
 	// Load cells & create edges
 	for (var x = 0; x < json['width']; x++) {
 		for (var y = 0; y < json['height']; y++) {
@@ -76,7 +102,7 @@ GameState.prototype.loadLevelFromJSON = function(json) {
 	// Reset players
 	this.playerA.reset(this.world.spawnPoint, EDGE_RED);
 	this.playerB.reset(this.world.spawnPoint, EDGE_BLUE);
-	
+
 	// Load entities
 	for (var i = 0; i < json['entities'].length; ++i) {
 		var e = json['entities'][i];

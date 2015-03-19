@@ -1,5 +1,7 @@
-function PlayerStats(callback) {
-	this.current_username = username;
+import {getCookie} from '../util/cookie';
+
+export default function PlayerStats(callback) {
+	this.current_username = null;  // TODO: where do we get this?
 	this.stats = [];
 
 	if (this.current_username !== null) {
@@ -30,7 +32,7 @@ PlayerStats.prototype.getStatsForLevel = function(username, levelname) {
 			return stat;
 		}
 	}
-	
+
 	// return default if not found
 	return {
 		'username': username,
@@ -57,7 +59,7 @@ PlayerStats.prototype.setStatsForLevel = function(username, levelname, complete,
 		'gotAllCogs': gotAllCogs
 	};
 	this.stats.push(stat);
-	
+
 	if (this.current_username !== null) {
 		// save stat to server if user is logged in
 		$.ajax({

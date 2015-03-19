@@ -1,12 +1,15 @@
-var CELL_EMPTY = 0;
-var CELL_SOLID = 1;
-var CELL_FLOOR_DIAG_LEFT = 2;
-var CELL_FLOOR_DIAG_RIGHT = 3;
-var CELL_CEIL_DIAG_LEFT = 4;
-var CELL_CEIL_DIAG_RIGHT = 5;
+import Polygon from '../collisions/polygon';
+import Vector from '../util/vector';
+
+export const CELL_EMPTY = 0;
+export const CELL_SOLID = 1;
+export const CELL_FLOOR_DIAG_LEFT = 2;
+export const CELL_FLOOR_DIAG_RIGHT = 3;
+export const CELL_CEIL_DIAG_LEFT = 4;
+export const CELL_CEIL_DIAG_RIGHT = 5;
 
 // class Cell
-function Cell(x, y, type) {
+export function Cell(x, y, type) {
 	this.x = x;
 	this.y = y;
 	this.type = type;
